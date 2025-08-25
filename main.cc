@@ -2,6 +2,21 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+static bool create_shader(GLuint& handle, GLenum p_type, const char* p_source) {
+  handle = glCreateShader(p_type);
+  glShaderSource(handle, 1, &p_source, NULL);
+  glCompileShader(handle);
+
+  GLint status;
+  glGetShaderiv(handle, GL_COMPILE_STATUS, &status);
+  if (!status) {
+    std::cerr << "shader creation failed\n";
+    return false;
+  }
+
+  return true;
+}
+
 static void error_callback(int err, const char* description)
 {
   std::cerr << err << " error: " << description << "\n";
@@ -59,10 +74,6 @@ int main() {
     }
   )glsl";
 
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexSource, NULL);
-  glCompileShader(vertexShader);
-
   const char* fragmentSource = R"glsl(
     #version 150 core
 
@@ -74,21 +85,9 @@ int main() {
     }
   )glsl";
 
-  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-  glCompileShader(fragmentShader);
-
-  GLint status;
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-  if (!status) {
-    std::cerr << "BAD\n";
-  }
-
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-  if (!status) {
-    std::cerr << "BAD\n";
-  }
-  std::cout << glGetError();
+  GLuint vertexShader, fragmentShader;
+  create_shader(vertexShader, GL_VERTEX_SHADER, vertexSource);
+  create_shader(fragmentShader, GL_FRAGMENT_SHADER, fragmentSource);
 
   GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
