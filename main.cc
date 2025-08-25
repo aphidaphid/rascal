@@ -74,9 +74,9 @@ int main() {
   gladLoadGL();
 
   float vertices[] = {
-       0.0f,  0.5f, 1.0f, 0.0f, 0.0f,
-       0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-      -0.5f, -0.5f, 0.0f, 0.0f, 1.0f
+     0.0f,  0.5f, 1.0f, 0.0f, 0.0f,
+     0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f
   };
 
   GLuint vao;
@@ -103,7 +103,10 @@ int main() {
   glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
   glEnableVertexAttribArray(colAttrib);
 
+  GLint time = glGetUniformLocation(shaderProgramme, "u_time");
+
   while (!glfwWindowShouldClose(window)) {
+    glUniform1f(time, glfwGetTime());
     glClear(GL_COLOR_BUFFER_BIT);
 
     int width, height;

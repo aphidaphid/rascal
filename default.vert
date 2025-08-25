@@ -8,5 +8,7 @@ out vec3 colour;
 void main()
 {
   colour = a_colour;
-  gl_Position = vec4(a_position, 0.0, 1.0);
+  vec2 pos = a_position;
+  pos.y = -pos.y;
+  gl_Position = vec4(pos, 0.0, 1.0);
 }
