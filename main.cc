@@ -1,10 +1,22 @@
 #include <iostream>
+#include <cstdio>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-static bool create_shader(GLuint& handle, GLenum p_type, const char* p_source) {
+static bool create_shader(GLuint& handle, GLenum p_type, const char* p_src) {
+  std::string src{};
+  FILE* file = std::fopen(p_src, "r");
+
+  int c;
+  while ((c = std::fgetc(file)) != EOF)
+    src += c;
+
+  std::fclose(file);
+
+  const char* src_cstr = src.c_str();
+
   handle = glCreateShader(p_type);
-  glShaderSource(handle, 1, &p_source, NULL);
+  glShaderSource(handle, 1, &src_cstr, NULL);
   glCompileShader(handle);
 
   GLint status;
@@ -63,31 +75,9 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  const char* vertexSource = R"glsl(
-    #version 150 core
-
-    in vec2 position;
-
-    void main()
-    {
-        gl_Position = vec4(position, 0.0, 1.0);
-    }
-  )glsl";
-
-  const char* fragmentSource = R"glsl(
-    #version 150 core
-
-    out vec4 fragColor;
-
-    void main()
-    {
-        fragColor = vec4(1.0);
-    }
-  )glsl";
-
   GLuint vertexShader, fragmentShader;
-  create_shader(vertexShader, GL_VERTEX_SHADER, vertexSource);
-  create_shader(fragmentShader, GL_FRAGMENT_SHADER, fragmentSource);
+  create_shader(vertexShader, GL_VERTEX_SHADER, "default.vert");
+  create_shader(fragmentShader, GL_FRAGMENT_SHADER, "default.frag");
 
   GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
