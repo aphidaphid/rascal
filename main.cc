@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstdio>
+#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -27,6 +27,19 @@ static bool create_shader(GLuint& handle, GLenum p_type, const char* p_src) {
   }
 
   return true;
+}
+
+static bool create_shader_programme(GLuint& handle, GLuint& vhandle, GLuint& fhandle) {
+  handle = glCreateProgram();
+  glAttachShader(handle, vhandle);
+  glAttachShader(handle, fhandle);
+  glBindFragDataLocation(handle, 0, "fragColor");
+  glLinkProgram(handle);
+  return true;
+}
+
+static inline void use_shader_programme(GLuint& handle) {
+  glUseProgram(handle);
 }
 
 static void error_callback(int err, const char* description)
@@ -61,9 +74,9 @@ int main() {
   gladLoadGL();
 
   float vertices[] = {
-       0.0f,  0.5f,
-       0.5f, -0.5f,
-      -0.5f, -0.5f
+       0.0f,  0.5f, 1.0f, 0.0f, 0.0f,
+       0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+      -0.5f, -0.5f, 0.0f, 0.0f, 1.0f
   };
 
   GLuint vao;
@@ -75,20 +88,20 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  GLuint vertexShader, fragmentShader;
+  GLuint vertexShader, fragmentShader, shaderProgramme;
   create_shader(vertexShader, GL_VERTEX_SHADER, "default.vert");
   create_shader(fragmentShader, GL_FRAGMENT_SHADER, "default.frag");
 
-  GLuint shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glBindFragDataLocation(shaderProgram, 0, "fragColor");
-  glLinkProgram(shaderProgram);
-  glUseProgram(shaderProgram);
+  create_shader_programme(shaderProgramme, vertexShader, fragmentShader);
+  use_shader_programme(shaderProgramme);
 
-  GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  GLint posAttrib = glGetAttribLocation(shaderProgramme, "a_position");
+  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
   glEnableVertexAttribArray(posAttrib);
+
+  GLint colAttrib = glGetAttribLocation(shaderProgramme, "a_colour");
+  glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
+  glEnableVertexAttribArray(colAttrib);
 
   while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT);
