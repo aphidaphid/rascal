@@ -1,8 +1,8 @@
 CC=g++
-LIBS=-Ilib/glad/include -lglfw
+LIBS=-Ilib/glad/include -Isrc -lglfw
 FLAGS=-Wfatal-errors
 
-SRC=main.cc lib/glad/src/glad.c
+SRC=src/*.cc lib/glad/src/glad.c
 BIN=rascal
 
 all: rascal
