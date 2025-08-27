@@ -6,11 +6,12 @@
 #include <GLFW/glfw3.h>
 
 struct Client {
-  GLFWwindow* handle;
-
   Client(const char* p_title);
   ~Client();
-  void render();
+  void update();
+
+  GLFWwindow* handle;
+  bool running;
 };
 
 #endif /* CLIENT_H */

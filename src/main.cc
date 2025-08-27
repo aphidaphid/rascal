@@ -1,9 +1,9 @@
 #include "shader.h"
 #include "client.h"
 
-int main() {
-  Client client{"rascal"};
+static Client client{"rascal"};
 
+int main() {
   GLuint vao;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
@@ -30,7 +30,7 @@ int main() {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
-  Shader shader{"default.vert", "default.frag"};
+  Shader shader{"res/default.vert", "res/default.frag"};
   shader.use();
 
   GLint posAttrib = glGetAttribLocation(shader.handle, "a_position");
@@ -41,9 +41,10 @@ int main() {
   glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
   glEnableVertexAttribArray(colAttrib);
 
-  while (!glfwWindowShouldClose(client.handle)) {
+  while (client.running) {
+    client.update();
+
     shader.set_uniform1f("u_time", glfwGetTime());
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    client.render();
   }
 }

@@ -11,7 +11,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
-Client::Client(const char* p_title) {
+Client::Client(const char* p_title)
+: running{false} {
   if (!glfwInit()) {
     std::cerr << "glfw failed to initialise\n";
   }
@@ -30,6 +31,8 @@ Client::Client(const char* p_title) {
 
   glfwMakeContextCurrent(handle);
   gladLoadGL();
+
+  running = true;
 }
 
 Client::~Client() {
@@ -37,7 +40,7 @@ Client::~Client() {
   glfwTerminate();
 }
 
-void Client::render() {
+void Client::update() {
   glfwSwapBuffers(handle);
   glfwPollEvents();
 
@@ -46,4 +49,6 @@ void Client::render() {
   int width, height;
   glfwGetFramebufferSize(handle, &width, &height);
   glViewport(0, 0, width, height);
+
+  running = !glfwWindowShouldClose(handle);
 }
