@@ -1,38 +1,8 @@
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "shader.h"
-
-void error_callback(int err, const char* description)
-{
-  std::cerr << err << " error: " << description << "\n";
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
+#include "client.h"
 
 int main() {
-  if (!glfwInit()) {
-    std::cerr << "glfw failed to initialise\n";
-  }
-
-  glfwSetErrorCallback(error_callback);
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-  GLFWwindow* window = glfwCreateWindow(800, 600, "rascal", NULL, NULL);
-  if (!window) {
-    std::cerr << "GLFWwindow failed to initialise\n";
-  }
-
-  glfwSetKeyCallback(window, key_callback);
-
-  glfwMakeContextCurrent(window);
-  gladLoadGL();
+  Client client{"rascal"};
 
   float vertices[] = {
      0.0f,  0.5f, 1.0f, 0.0f, 0.0f,
@@ -60,21 +30,9 @@ int main() {
   glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
   glEnableVertexAttribArray(colAttrib);
 
-  while (!glfwWindowShouldClose(window)) {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    glViewport(0, 0, width, height);
-
+  while (!glfwWindowShouldClose(client.handle)) {
     shader.set_uniform1f("u_time", glfwGetTime());
-
     glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    glfwSwapBuffers(window);
-    glfwPollEvents();
+    client.render();
   }
-
-  glfwDestroyWindow(window);
-  glfwTerminate();
 }
