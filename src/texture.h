@@ -6,7 +6,7 @@
 
 struct Texture {
   Texture(const char* p_file);
-  void use();
+  void use(int p_texunit = 0);
 
   GLuint handle;
   unsigned char* img_handle;

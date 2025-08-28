@@ -5,9 +5,7 @@
 Texture::Texture(const char* p_file) {
   img_handle = stbi_load(p_file, &width, &height, &channels, 0);
 
-  if (img_handle == NULL) {
-    std::cerr << "image loading failed\n";
-  }
+  assert((img_handle != NULL) && "image loading failed");
 
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
@@ -22,6 +20,7 @@ Texture::Texture(const char* p_file) {
   stbi_image_free(img_handle);
 }
 
-void Texture::use() {
+void Texture::use(int p_texunit) {
+  glActiveTexture(GL_TEXTURE0+p_texunit);
   glBindTexture(GL_TEXTURE_2D, handle);
 }
