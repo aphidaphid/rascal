@@ -18,9 +18,7 @@ Texture::Texture(const char* p_file) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   glGenerateMipmap(GL_TEXTURE_2D);
-}
 
-Texture::~Texture() {
   stbi_image_free(img_handle);
 }
 

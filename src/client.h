@@ -8,7 +8,9 @@
 struct Client {
   Client(const char* p_title);
   ~Client();
+
   void update();
+  bool get_key(int p_key);
 
   GLFWwindow* handle;
   bool running;

@@ -52,3 +52,7 @@ void Client::update() {
 
   running = !glfwWindowShouldClose(handle);
 }
+
+bool Client::get_key(int p_key) {
+  return glfwGetKey(handle, p_key);
+}

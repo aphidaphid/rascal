@@ -31,16 +31,24 @@ int main() {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
-  Shader shader{"res/default.vert", "res/default.frag"};
+  Shader shader{"res/shaders/default.vert", "res/shaders/default.frag"};
   shader.use();
 
-  Texture tex{"res/cat.png"};
-  tex.use();
+  Texture tiles{"res/textures/tiles_512px.jpg"};
+  Texture concrete{"res/textures/concrete_512px.jpg"};
+  tiles.use();
 
+  bool textoggle{};
   while (client.running) {
+    shader.set_float("u_time", glfwGetTime());
     client.update();
 
-    shader.set_float("u_time", glfwGetTime());
+    if (client.get_key(GLFW_KEY_A)) {
+      tiles.use();
+    } else {
+      concrete.use();
+    }
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   }
 }
