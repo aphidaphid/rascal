@@ -1,5 +1,24 @@
 #include "shader.h"
 
+static inline GLuint create_shader(const char* p_src, GLenum p_type) {
+  GLuint handle = glCreateShader(p_type);
+  glShaderSource(handle, 1, &p_src, NULL);
+  glCompileShader(handle);
+
+  GLint status;
+  glGetShaderiv(handle, GL_COMPILE_STATUS, &status);
+  if (!status) {
+    char buffer[512];
+    glGetShaderInfoLog(handle, 512, NULL, buffer);
+
+    std::cerr << "shader creation failed:\n";
+    std::cerr << buffer;
+
+    std::abort();
+  }
+  return handle;
+}
+
 static std::string read_file(const char* p_file) {
   std::string result{};
   std::FILE* f = std::fopen(p_file, "r");
@@ -19,13 +38,8 @@ Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
   const char* vsrc = vsrc_s.c_str();
   const char* fsrc = fsrc_s.c_str();
 
-  vhandle = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vhandle, 1, &vsrc, NULL);
-  glCompileShader(vhandle);
-
-  fhandle = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fhandle, 1, &fsrc, NULL);
-  glCompileShader(fhandle);
+  vhandle = create_shader(vsrc, GL_VERTEX_SHADER);
+  fhandle = create_shader(fsrc, GL_FRAGMENT_SHADER);
 
   handle = glCreateProgram();
   glAttachShader(handle, vhandle);
@@ -41,6 +55,8 @@ Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
 
     std::cerr << "shader programme creation failed:\n";
     std::cerr << buffer;
+
+    std::abort();
   }
 
   GLint posAttrib = glGetAttribLocation(handle, "a_position");

@@ -2,6 +2,7 @@
 #define SHADER_H
 
 #include <cstring>
+#include <cassert>
 #include <cstdio>
 #include <iostream>
 #include <glad/glad.h>
