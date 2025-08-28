@@ -48,6 +48,6 @@ void Shader::use() {
   glUseProgram(handle);
 }
 
-void Shader::set_uniform1f(const char* p_uniform, float p_set) {
+void Shader::set_float(const char* p_uniform, float p_set) {
   glUniform1f(glGetUniformLocation(handle, p_uniform), p_set);
 }
