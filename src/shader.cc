@@ -42,6 +42,18 @@ Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
     std::cerr << "shader programme creation failed:\n";
     std::cerr << buffer;
   }
+
+  GLint posAttrib = glGetAttribLocation(handle, "a_position");
+  GLint colAttrib = glGetAttribLocation(handle, "a_colour");
+  GLint texCoordAttrib = glGetAttribLocation(handle, "a_tex_coord");
+
+  glVertexAttribPointer(posAttrib,      2, GL_FLOAT, GL_FALSE, 7*sizeof(float), 0);
+  glVertexAttribPointer(colAttrib,      3, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(2*sizeof(float)));
+  glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(5*sizeof(float)));
+
+  glEnableVertexAttribArray(posAttrib);
+  glEnableVertexAttribArray(colAttrib);
+  glEnableVertexAttribArray(texCoordAttrib);
 }
 
 void Shader::use() {

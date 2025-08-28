@@ -10,6 +10,5 @@ out vec4 fragColor;
 
 void main()
 {
-  // fragColor = vec4(colour + vec3(sin(u_time)), 1.0);
-  fragColor = texture(tex, tex_coord) * vec4(colour, 1.0);
+  fragColor = texture(tex, tex_coord) * vec4(colour + vec3(sin(u_time)), 1.0);
 }
