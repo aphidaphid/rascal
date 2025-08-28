@@ -35,23 +35,13 @@ int main() {
   shader.use();
 
   Texture tiles{"res/textures/tiles_512px.jpg"};
-  Texture concrete{"res/textures/concrete_512px.jpg"};
-  tiles.use(0);
-  concrete.use(1);
+  Texture concrete{"res/textures/concrete_512px.jpg", 1};
 
-  bool textoggle{};
   shader.set_int("u_tex0", 0);
   shader.set_int("u_tex1", 1);
   while (client.running) {
     shader.set_float("u_time", glfwGetTime());
     client.update();
-
-    // if (client.get_key(GLFW_KEY_A)) {
-    //   tiles.use();
-    // } else {
-    //   concrete.use();
-    // }
-
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   }
 }

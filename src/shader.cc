@@ -1,8 +1,20 @@
 #include "shader.h"
 
-static inline GLuint create_shader(const char* p_src, GLenum p_type) {
+static GLuint create_shader(const char* p_src, GLenum p_type) {
+  std::string src_s;
+
+  std::FILE* f = std::fopen(p_src, "r");
+
+  int c;
+  while ((c = std::fgetc(f)) != EOF)
+    src_s += c;
+
+  std::fclose(f);
+
+  const char* src = src_s.c_str();
+
   GLuint handle = glCreateShader(p_type);
-  glShaderSource(handle, 1, &p_src, NULL);
+  glShaderSource(handle, 1, &src, NULL);
   glCompileShader(handle);
 
   GLint status;
@@ -19,27 +31,9 @@ static inline GLuint create_shader(const char* p_src, GLenum p_type) {
   return handle;
 }
 
-static std::string read_file(const char* p_file) {
-  std::string result{};
-  std::FILE* f = std::fopen(p_file, "r");
-
-  int c;
-  while ((c = std::fgetc(f)) != EOF)
-    result += c;
-
-  std::fclose(f);
-
-  return result;
-}
-
 Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
-  std::string vsrc_s = read_file(p_vertfile);
-  std::string fsrc_s = read_file(p_fragfile);
-  const char* vsrc = vsrc_s.c_str();
-  const char* fsrc = fsrc_s.c_str();
-
-  vhandle = create_shader(vsrc, GL_VERTEX_SHADER);
-  fhandle = create_shader(fsrc, GL_FRAGMENT_SHADER);
+  vhandle = create_shader(p_vertfile, GL_VERTEX_SHADER);
+  fhandle = create_shader(p_fragfile, GL_FRAGMENT_SHADER);
 
   handle = glCreateProgram();
   glAttachShader(handle, vhandle);

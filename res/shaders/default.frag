@@ -11,7 +11,7 @@ out vec4 fragColor;
 
 void main()
 {
-  vec4 tex0col = texture(u_tex0, tex_coord);
-  vec4 tex1col = texture(u_tex1, tex_coord);
-  fragColor = mix(tex0col, tex1col, sin(u_time));
+  vec4 tex0 = texture(u_tex0, tex_coord);
+  vec4 tex1 = texture(u_tex1, tex_coord);
+  fragColor = mix(tex0, tex1, sin(u_time));
 }
