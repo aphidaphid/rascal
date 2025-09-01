@@ -1,3 +1,7 @@
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "shader.h"
 #include "client.h"
 #include "texture.h"
@@ -10,6 +14,7 @@ int main() {
   glBindVertexArray(vao);
 
   float vertices[] = {
+  // pos       // colour         // texcoord
     -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
      0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
      0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
@@ -37,10 +42,15 @@ int main() {
   Texture tiles{"res/textures/tiles_512px.jpg"};
   Texture concrete{"res/textures/concrete_512px.jpg", 1};
 
+
   shader.set_int("u_tex0", 0);
   shader.set_int("u_tex1", 1);
   while (client.running) {
+    glm::mat4 trans = glm::rotate(glm::mat4(1.0f), static_cast<float>(glfwGetTime()) * glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    shader.set_mat4("u_trans", trans);
+
     shader.set_float("u_time", glfwGetTime());
+
     client.update();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   }

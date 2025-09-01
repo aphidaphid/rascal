@@ -1,5 +1,7 @@
 #version 150 core
 
+uniform mat4 u_trans;
+
 in vec2 a_position;
 in vec3 a_colour;
 in vec2 a_tex_coord;
@@ -11,5 +13,5 @@ void main()
 {
   colour = a_colour;
   tex_coord = a_tex_coord;
-  gl_Position = vec4(a_position, 0.0, 1.0);
+  gl_Position = u_trans * vec4(a_position, 0.0, 1.0);
 }

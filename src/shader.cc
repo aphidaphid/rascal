@@ -77,3 +77,7 @@ void Shader::set_float(const char* p_uniform, float p_set) {
 void Shader::set_int(const char* p_uniform, int p_set) {
   glUniform1i(glGetUniformLocation(handle, p_uniform), p_set);
 }
+
+void Shader::set_mat4(const char* p_uniform, glm::mat4& p_set) {
+  glUniformMatrix4fv(glGetUniformLocation(handle, p_uniform), 1, GL_FALSE, glm::value_ptr(p_set));
+}
