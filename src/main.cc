@@ -6,7 +6,6 @@
 #include "client.h"
 #include "texture.h"
 
-static Client client{"rascal"};
 
 struct Mesh {
   Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation = 0)
@@ -47,6 +46,8 @@ struct Mesh {
 };
 
 int main() {
+  Client client{"rascal"};
+
   Mesh rect{glm::vec2(0), glm::vec2(300, 300)};
 
   Shader shader{"res/shaders/default.vert", "res/shaders/default.frag"};
@@ -57,9 +58,9 @@ int main() {
 
   shader.set_int("u_tex0", 0);
   shader.set_int("u_tex1", 1);
+  float x{}, y{};
   while (client.running) {
-    std::cout << (std::sin(glfwGetTime()) + 1) / 2 << "\n";
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(2.5, 0.5, 0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
     glm::mat4 view = glm::scale(model, glm::vec3(rect.scale.x, rect.scale.y, 1.0f));
     glm::mat4 proj = glm::ortho(0.0f, static_cast<float>(client.width), 0.0f, static_cast<float>(client.height), 0.0f, 1000.0f);
 
@@ -68,6 +69,13 @@ int main() {
     shader.set_mat4("u_proj", proj);
 
     shader.set_float("u_time", glfwGetTime());
+
+    client.begin_ui();
+    ImGui::Begin("xy");
+    ImGui::SliderFloat("x", &x, 0.0f, 16.0f);
+    ImGui::SliderFloat("y", &y, 0.0f, 16.0f);
+    ImGui::End();
+    client.render_ui();
 
     client.update();
     rect.render();
