@@ -1,5 +1,5 @@
 CC=g++
-LIBS=-Ilib/glad/include -Ilib/stb -Isrc -lglfw -lglm
+LIBS=-Ilib/glad/include -Ilib/stb -Ilib/imgui -Isrc -lglfw -lglm
 FLAGS=-Wfatal-errors
 
 SRC=src/*.cc lib/glad/src/glad.c
