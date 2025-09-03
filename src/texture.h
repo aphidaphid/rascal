@@ -9,8 +9,6 @@ struct Texture {
   void use(int p_texunit = 0);
 
   GLuint handle;
-  unsigned char* img_handle;
-  int width, height, channels;
 };
 
 #endif /* TEXTURE_H */

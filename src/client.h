@@ -14,6 +14,7 @@ struct Client {
 
   GLFWwindow* handle;
   bool running;
+  int width, height;
 };
 
 #endif /* CLIENT_H */

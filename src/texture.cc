@@ -3,7 +3,8 @@
 #include "stb_image.h"
 
 Texture::Texture(const char* p_file, int p_texunit) {
-  img_handle = stbi_load(p_file, &width, &height, &channels, 0);
+  int width, height, channels;
+  unsigned char* img_handle = stbi_load(p_file, &width, &height, &channels, 0);
 
   assert((img_handle != NULL) && "image loading failed");
 

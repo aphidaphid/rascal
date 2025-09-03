@@ -46,7 +46,6 @@ void Client::update() {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  int width, height;
   glfwGetFramebufferSize(handle, &width, &height);
   glViewport(0, 0, width, height);
 
