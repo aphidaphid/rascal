@@ -1,10 +1,12 @@
 #include "mesh.h"
 
-extern glm::vec2 g_camera;
+extern Camera g_camera;
 extern Client g_client;
 
-Mesh::Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation)
+Mesh::Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation, Shader* p_shader)
 : position{p_position}, scale{p_scale}, rotation{p_rotation} {
+  shader = p_shader;
+
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
@@ -39,21 +41,13 @@ Mesh::~Mesh() {
 void Mesh::render() {
   glBindVertexArray(vao);
   shader->use();
-  float x = std::sin(glfwGetTime());
-  float y = std::cos(glfwGetTime());
-
-  glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
+  glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.0f));
   glm::mat4 view = glm::scale(model, glm::vec3(scale.x, scale.y, 1.0f));
   glm::mat4 proj = glm::ortho(g_camera.x, g_camera.x+static_cast<float>(g_client.width), g_camera.y, g_camera.y+static_cast<float>(g_client.height), 0.0f, 1000.0f);
 
   shader->set_mat4("u_model", model);
   shader->set_mat4("u_view", view);
   shader->set_mat4("u_proj", proj);
-
-  shader->set_float("u_time", glfwGetTime());
-
-  shader->set_int("u_tex0", 0);
-  shader->set_int("u_tex1", 1);
 
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

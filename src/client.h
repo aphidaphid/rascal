@@ -1,6 +1,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#define DPRINT(x) std::cout << #x": " << x << "\n"
+
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

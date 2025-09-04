@@ -9,6 +9,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-extern glm::vec2 g_camera;
+extern struct Camera {
+  float x;
+  float y;
+} g_camera;
 
 #endif /* GFX_COMMON_H */

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 4.0)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_FLAGS    "-Wfatal-errors")
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE   Debug)
 
 project(rascal)
 

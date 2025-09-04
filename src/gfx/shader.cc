@@ -52,7 +52,15 @@ Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
 
     std::abort();
   }
+}
 
+Shader::~Shader() {
+  glDeleteShader(vhandle);
+  glDeleteShader(fhandle);
+  glDeleteProgram(handle);
+}
+
+void Shader::use() {
   GLint posAttrib = glGetAttribLocation(handle, "a_position");
   GLint colAttrib = glGetAttribLocation(handle, "a_colour");
   GLint texCoordAttrib = glGetAttribLocation(handle, "a_tex_coord");
@@ -64,15 +72,12 @@ Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
   glEnableVertexAttribArray(posAttrib);
   glEnableVertexAttribArray(colAttrib);
   glEnableVertexAttribArray(texCoordAttrib);
-}
 
-Shader::~Shader() {
-  glDeleteShader(vhandle);
-  glDeleteShader(fhandle);
-  glDeleteProgram(handle);
-}
+  // texture units
+  set_int("u_tex0", 0);
+  set_int("u_tex1", 1);
+  set_float("u_time", glfwGetTime());
 
-void Shader::use() {
   glUseProgram(handle);
 }
 
