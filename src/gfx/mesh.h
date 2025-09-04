@@ -6,6 +6,7 @@
 
 struct Mesh {
   Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation = 0);
+  ~Mesh();
 
   void render();
 

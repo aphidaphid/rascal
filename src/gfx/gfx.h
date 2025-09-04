@@ -10,6 +10,5 @@
 #include <glm/gtc/type_ptr.hpp>
 
 extern glm::vec2 g_camera;
-extern Client g_client;
 
 #endif /* GFX_COMMON_H */

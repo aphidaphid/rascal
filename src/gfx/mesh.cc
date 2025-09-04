@@ -30,6 +30,12 @@ Mesh::Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation)
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 }
 
+Mesh::~Mesh() {
+  glDeleteBuffers(1, &vbo);
+  glDeleteBuffers(1, &ebo);
+  glDeleteVertexArrays(1, &vao);
+}
+
 void Mesh::render() {
   glBindVertexArray(vao);
   shader->use();

@@ -66,6 +66,12 @@ Shader::Shader(const char* p_vertfile, const char* p_fragfile) {
   glEnableVertexAttribArray(texCoordAttrib);
 }
 
+Shader::~Shader() {
+  glDeleteShader(vhandle);
+  glDeleteShader(fhandle);
+  glDeleteProgram(handle);
+}
+
 void Shader::use() {
   glUseProgram(handle);
 }

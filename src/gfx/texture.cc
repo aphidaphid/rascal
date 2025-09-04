@@ -22,6 +22,10 @@ Texture::Texture(const char* p_file, int p_texunit) {
   stbi_image_free(img_handle);
 }
 
+Texture::~Texture() {
+  glDeleteTextures(1, &handle);
+}
+
 void Texture::use(int p_texunit) {
   glActiveTexture(GL_TEXTURE0+p_texunit);
   glBindTexture(GL_TEXTURE_2D, handle);

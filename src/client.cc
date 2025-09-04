@@ -1,7 +1,7 @@
 #include "client.h"
 
 static void error_callback(int err, const char* description) {
-  std::cerr << err << " error: " << description << "\n";
+  std::cerr << " error: " << description << "(" << err << ")\n";
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -62,13 +62,13 @@ void Client::update() {
   running = !glfwWindowShouldClose(handle);
 }
 
-void Client::begin_ui() {
+void Client::ui_begin() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 }
 
-void Client::render_ui() {
+void Client::ui_end() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

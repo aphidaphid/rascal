@@ -7,6 +7,7 @@
 
 struct Shader {
   Shader(const char* p_vertfile, const char* p_fragfile);
+  ~Shader();
   void use();
   void set_float(const char* p_uniform, float p_set);
   void set_int(const char* p_uniform, int p_set);

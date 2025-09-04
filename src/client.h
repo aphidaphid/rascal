@@ -14,8 +14,8 @@ struct Client {
 
   void init_ui();
   void update();
-  void begin_ui();
-  void render_ui();
+  void ui_begin();
+  void ui_end();
 
   bool get_key(int p_key);
 
@@ -23,5 +23,7 @@ struct Client {
   bool running;
   int width, height;
 };
+
+extern Client g_client;
 
 #endif /* CLIENT_H */

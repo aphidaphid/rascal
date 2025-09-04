@@ -20,12 +20,15 @@ int main() {
 
   g_camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
   while (g_client.running) {
-    // g_client.begin_ui();
+    g_client.ui_begin();
     // ImGui::Begin("xy");
     // ImGui::SliderFloat("x", &x, 0.0f, 16.0f);
     // ImGui::SliderFloat("y", &y, 0.0f, 16.0f);
     // ImGui::End();
-    // g_client.render_ui();
+    bool t = true;
+    ImGui::ShowDemoWindow(&t);
+    g_client.ui_end();
+
     g_client.update();
     rect.render();
   }
