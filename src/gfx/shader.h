@@ -1,13 +1,9 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include "gfx.h"
 #include <cstring>
-#include <cassert>
 #include <cstdio>
-#include <iostream>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 struct Shader {
   Shader(const char* p_vertfile, const char* p_fragfile);

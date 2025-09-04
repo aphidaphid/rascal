@@ -1,8 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <iostream>
-#include <glad/glad.h>
+#include "gfx.h"
 
 struct Texture {
   Texture(const char* p_file, int p_texunit = 0);

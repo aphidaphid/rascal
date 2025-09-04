@@ -11,11 +11,13 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 Client::Client(const char* p_title)
 : running{false} {
+  std::cout << "creating client...\n";
+
+  glfwSetErrorCallback(error_callback);
+
   if (!glfwInit()) {
     std::cerr << "glfw failed to initialise\n";
   }
-
-  glfwSetErrorCallback(error_callback);
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -32,6 +34,7 @@ Client::Client(const char* p_title)
   gladLoadGL();
 
   running = true;
+  std::cout << "client created\n";
 }
 
 void Client::init_ui() {
