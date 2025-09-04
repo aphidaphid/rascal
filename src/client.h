@@ -12,6 +12,7 @@ struct Client {
   Client(const char* p_title);
   ~Client();
 
+  void init_ui();
   void update();
   void begin_ui();
   void render_ui();

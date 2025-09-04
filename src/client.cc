@@ -27,11 +27,14 @@ Client::Client(const char* p_title)
 
   glfwSetKeyCallback(handle, key_callback);
 
+  glfwGetFramebufferSize(handle, &width, &height);
   glfwMakeContextCurrent(handle);
   gladLoadGL();
 
   running = true;
+}
 
+void Client::init_ui() {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO(); (void)io;

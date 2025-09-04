@@ -6,6 +6,8 @@
 #include "client.h"
 #include "texture.h"
 
+static glm::vec2 g_camera{};
+static Client g_client{"rascal"};
 
 struct Mesh {
   Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation = 0)
@@ -37,47 +39,52 @@ struct Mesh {
 
   void render() {
     glBindVertexArray(vao);
+    shader->use();
+    float x = std::sin(glfwGetTime());
+    float y = std::cos(glfwGetTime());
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
+    glm::mat4 view = glm::scale(model, glm::vec3(scale.x, scale.y, 1.0f));
+    glm::mat4 proj = glm::ortho(g_camera.x, g_camera.x+static_cast<float>(g_client.width), g_camera.y, g_camera.y+static_cast<float>(g_client.height), 0.0f, 1000.0f);
+
+    shader->set_mat4("u_model", model);
+    shader->set_mat4("u_view", view);
+    shader->set_mat4("u_proj", proj);
+
+    shader->set_float("u_time", glfwGetTime());
+
+    shader->set_int("u_tex0", 0);
+    shader->set_int("u_tex1", 1);
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   }
 
   GLuint vao, vbo, ebo;
   glm::vec2 position, scale;
   float rotation;
+  Shader* shader;
 };
 
 int main() {
-  Client client{"rascal"};
+  g_client.init_ui();
 
-  Mesh rect{glm::vec2(0), glm::vec2(300, 300)};
+  Mesh rect{glm::vec2(0), glm::vec2(300)};
 
-  Shader shader{"res/shaders/default.vert", "res/shaders/default.frag"};
-  shader.use();
-
-  Texture tiles{"res/textures/tiles_512px.jpg"};
+  Texture tiles{"res/textures/tiles_512px.jpg", 0};
   Texture concrete{"res/textures/concrete_512px.jpg", 1};
 
-  shader.set_int("u_tex0", 0);
-  shader.set_int("u_tex1", 1);
-  float x{}, y{};
-  while (client.running) {
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
-    glm::mat4 view = glm::scale(model, glm::vec3(rect.scale.x, rect.scale.y, 1.0f));
-    glm::mat4 proj = glm::ortho(0.0f, static_cast<float>(client.width), 0.0f, static_cast<float>(client.height), 0.0f, 1000.0f);
+  Shader default_shader{"res/shaders/default.vert", "res/shaders/default.frag"};
+  rect.shader = &default_shader;
 
-    shader.set_mat4("u_model", model);
-    shader.set_mat4("u_view", view);
-    shader.set_mat4("u_proj", proj);
-
-    shader.set_float("u_time", glfwGetTime());
-
-    client.begin_ui();
-    ImGui::Begin("xy");
-    ImGui::SliderFloat("x", &x, 0.0f, 16.0f);
-    ImGui::SliderFloat("y", &y, 0.0f, 16.0f);
-    ImGui::End();
-    client.render_ui();
-
-    client.update();
+  g_camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
+  while (g_client.running) {
+    // g_client.begin_ui();
+    // ImGui::Begin("xy");
+    // ImGui::SliderFloat("x", &x, 0.0f, 16.0f);
+    // ImGui::SliderFloat("y", &y, 0.0f, 16.0f);
+    // ImGui::End();
+    // g_client.render_ui();
+    g_client.update();
     rect.render();
   }
 }
