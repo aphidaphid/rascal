@@ -44,6 +44,7 @@ void Mesh::render() {
   glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.0f));
   glm::mat4 view = glm::scale(model, glm::vec3(scale.x, scale.y, 1.0f));
   glm::mat4 proj = glm::ortho(g_client.camera.x, g_client.camera.x+static_cast<float>(g_client.width), g_client.camera.y, g_client.camera.y+static_cast<float>(g_client.height), 0.0f, 1000.0f);
+  proj = glm::scale(proj, glm::vec3(glm::vec2(g_client.camera.scale), 1.0f));
 
   shader->set_mat4("u_model", model);
   shader->set_mat4("u_view", view);

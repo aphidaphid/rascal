@@ -33,8 +33,7 @@ struct Client {
   double delta_time;
   double last_frame_time;
 
-  // for debugging purposes
-  std::string text;
+  std::string text; // for debugging
 
   ImGuiIO* io;
 
@@ -45,7 +44,6 @@ struct Client {
 
   struct {
     double x, y;
-    double xoff, yoff;
     MouseButton button;
     bool is_pressed;
   } cursor;

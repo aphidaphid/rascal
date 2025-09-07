@@ -29,14 +29,7 @@ int main() {
     ImGui::Begin("info");
     ImGui::Text(std::to_string(g_client.delta_time).c_str());
     ImGui::End();
-    // bool t = true;
-    // ImGui::ShowDemoWindow(&t);
     g_client.ui_end();
-
-    // rect.scale.x += std::sin(glfwGetTime());
-    // rect.scale.y += std::cos(glfwGetTime());
-    // rect.position.x = std::sin(glfwGetTime());
-    // rect.position.y = std::cos(glfwGetTime());
 
     rect2.scale.y += std::sin(glfwGetTime());
     rect2.scale.x += std::cos(glfwGetTime());

@@ -20,8 +20,9 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 }
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
-  g_client.cursor.xoff = xoff;
-  g_client.cursor.yoff = yoff;
+  g_client.camera.scale += yoff * g_client.camera.scale/1.0f * g_client.delta_time * 2;
+  if (g_client.camera.scale < 0.0f)
+    g_client.camera.scale = 0.01f;
 }
 
 Client::Client(const char* p_title)
@@ -48,6 +49,7 @@ Client::Client(const char* p_title)
 
   glfwGetFramebufferSize(handle, &width, &height);
   glfwMakeContextCurrent(handle);
+  glfwSwapInterval(1); // vsync
   gladLoadGL();
 
   running = true;
@@ -82,7 +84,6 @@ void Client::update() {
   running = !glfwWindowShouldClose(handle);
 
   glfwGetCursorPos(handle, &cursor.x, &cursor.y);
-  text = std::to_string(cursor.button) + ", " + std::to_string(cursor.is_pressed);
 }
 
 void Client::ui_begin() {
