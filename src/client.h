@@ -4,6 +4,7 @@
 #define DPRINT(x) std::cout << #x": " << x << "\n"
 
 #include <iostream>
+#include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>

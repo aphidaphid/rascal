@@ -20,6 +20,7 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 }
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
+  // multiply with `g_client.camera.scale/1.0f` to zoom linearly
   g_client.camera.scale += yoff * g_client.camera.scale/1.0f * g_client.delta_time * 2;
   if (g_client.camera.scale < 0.0f)
     g_client.camera.scale = 0.01f;
@@ -84,6 +85,15 @@ void Client::update() {
   running = !glfwWindowShouldClose(handle);
 
   glfwGetCursorPos(handle, &cursor.x, &cursor.y);
+
+  static glm::vec2 curlastpos{};
+  if (cursor.is_pressed) {
+    glm::vec2 position{cursor.x, cursor.y};
+    position -= curlastpos;
+    camera.x -= position.x;
+    camera.y += position.y;
+  }
+  curlastpos = { g_client.cursor.x, g_client.cursor.y };
 }
 
 void Client::ui_begin() {

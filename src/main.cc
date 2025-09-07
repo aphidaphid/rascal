@@ -36,14 +36,6 @@ int main() {
     rect2.position.y = std::sin(glfwGetTime());
     rect2.position.x = std::cos(glfwGetTime());
 
-    if (g_client.cursor.is_pressed) {
-      glm::vec2 position{g_client.cursor.x, g_client.cursor.y};
-      position -= curlastpos;
-      g_client.camera.x -= position.x;
-      g_client.camera.y += position.y;
-    }
-    curlastpos = { g_client.cursor.x, g_client.cursor.y };
-
     if (g_client.get_key(GLFW_KEY_C)) {
       g_client.camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
     }
