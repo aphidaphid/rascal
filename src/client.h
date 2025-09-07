@@ -38,6 +38,8 @@ struct Client {
 
   ImGuiIO* io;
 
+  // NOTE: `Client` should really just be a container for a graphics context, input & a window, so `camera` doesn't really belong here
+  // i'll probably end up moving it to somewhere else
   struct {
     float x, y;
     float scale = 1.0f;

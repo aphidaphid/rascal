@@ -28,6 +28,14 @@ int main() {
     g_client.ui_begin();
     ImGui::Begin("info");
     ImGui::Text(std::to_string(g_client.delta_time).c_str());
+    if (ImGui::Button("wireframe")) {
+      static bool wireframe{false};
+      wireframe = !wireframe;
+      if (wireframe)
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+      else
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
     ImGui::End();
     g_client.ui_end();
 
