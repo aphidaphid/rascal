@@ -10,7 +10,6 @@
  * TODO: keyboard, mouse, resize callbacks
  */
 
-Camera g_camera{};
 Client g_client{"rascal"};
 
 int main() {
@@ -22,7 +21,7 @@ int main() {
   Mesh rect{glm::vec2(0), glm::vec2(300), 0, &default_shader};
   Mesh rect2{glm::vec2(0), glm::vec2(300), 0, &default_shader};
 
-  g_camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
+  g_client.camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
   float x{}, y{};
   glm::vec2 curlastpos{g_client.cursor.x, g_client.cursor.y};
   while (g_client.running) {
@@ -47,13 +46,13 @@ int main() {
     if (g_client.cursor.is_pressed) {
       glm::vec2 position{g_client.cursor.x, g_client.cursor.y};
       position -= curlastpos;
-      g_camera.x -= position.x;
-      g_camera.y += position.y;
+      g_client.camera.x -= position.x;
+      g_client.camera.y += position.y;
     }
     curlastpos = { g_client.cursor.x, g_client.cursor.y };
 
     if (g_client.get_key(GLFW_KEY_C)) {
-      g_camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
+      g_client.camera = {-static_cast<float>(g_client.width)/2, -static_cast<float>(g_client.height)/2};
     }
 
     g_client.update();

@@ -39,6 +39,11 @@ struct Client {
   ImGuiIO* io;
 
   struct {
+    float x, y;
+    float scale = 1.0f;
+  } camera;
+
+  struct {
     double x, y;
     double xoff, yoff;
     MouseButton button;
