@@ -26,10 +26,18 @@ static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
     g_client.camera.scale = 0.01f;
 }
 
-Client::Client(const char* p_title)
-: running{false}, cursor{} {
-  std::cout << "creating client...\n";
+static void cursor_enter_callback(GLFWwindow* window, int entered)
+{
+    if (entered) {
+      g_client.rendering = true;
+    }
+    else {
+      g_client.rendering = false;
+    }
+}
 
+Client::Client(const char* p_title)
+: running{false}, rendering{true}, cursor{} {
   glfwSetErrorCallback(error_callback);
 
   if (!glfwInit()) {
@@ -47,20 +55,20 @@ Client::Client(const char* p_title)
   glfwSetKeyCallback(handle, key_callback);
   glfwSetMouseButtonCallback(handle, mouse_button_callback);
   glfwSetScrollCallback(handle, scroll_callback);
+  glfwSetCursorEnterCallback(handle, cursor_enter_callback);
 
   glfwGetFramebufferSize(handle, &width, &height);
+  camera = {-static_cast<float>(width)/2, -static_cast<float>(height)/2};
   glfwMakeContextCurrent(handle);
   glfwSwapInterval(1); // vsync
   gladLoadGL();
 
   running = true;
-  std::cout << "client created\n";
 }
 
 void Client::init_ui() {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  // ImGuiIO& io = ImGui::GetIO(); (void)io;
   io = &ImGui::GetIO();
   ImGui_ImplGlfw_InitForOpenGL(handle, true);
   ImGui_ImplOpenGL3_Init("#version 150");
@@ -72,6 +80,9 @@ Client::~Client() {
 }
 
 void Client::update() {
+  while (!glfwGetWindowAttrib(handle, GLFW_HOVERED)) {
+  }
+
   delta_time = glfwGetTime() - last_frame_time;
   last_frame_time = glfwGetTime();
   glfwSwapBuffers(handle);
@@ -105,6 +116,10 @@ void Client::ui_begin() {
 void Client::ui_end() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+double Client::get_time() {
+  return glfwGetTime();
 }
 
 bool Client::get_key(int p_key) {

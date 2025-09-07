@@ -26,8 +26,10 @@ struct Client {
   void ui_begin();
   void ui_end();
 
+  double get_time();
   bool get_key(int p_key);
 
+  bool rendering;
   GLFWwindow* handle;
   bool running;
   int width, height;
@@ -40,6 +42,7 @@ struct Client {
 
   // NOTE: `Client` should really just be a container for a graphics context, input & a window, so `camera` doesn't really belong here
   // i'll probably end up moving it to somewhere else
+  // perhaps to a global state object?
   struct {
     float x, y;
     float scale = 1.0f;
