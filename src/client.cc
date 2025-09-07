@@ -14,8 +14,18 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+  g_client.cursor.button = static_cast<MouseButton>(button);
+  g_client.cursor.is_pressed = action && !g_client.io->WantCaptureMouse;
+}
+
+static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
+  g_client.cursor.xoff = xoff;
+  g_client.cursor.yoff = yoff;
+}
+
 Client::Client(const char* p_title)
-: running{false} {
+: running{false}, cursor{} {
   std::cout << "creating client...\n";
 
   glfwSetErrorCallback(error_callback);
@@ -33,6 +43,8 @@ Client::Client(const char* p_title)
   }
 
   glfwSetKeyCallback(handle, key_callback);
+  glfwSetMouseButtonCallback(handle, mouse_button_callback);
+  glfwSetScrollCallback(handle, scroll_callback);
 
   glfwGetFramebufferSize(handle, &width, &height);
   glfwMakeContextCurrent(handle);
@@ -45,7 +57,8 @@ Client::Client(const char* p_title)
 void Client::init_ui() {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO(); (void)io;
+  // ImGuiIO& io = ImGui::GetIO(); (void)io;
+  io = &ImGui::GetIO();
   ImGui_ImplGlfw_InitForOpenGL(handle, true);
   ImGui_ImplOpenGL3_Init("#version 150");
 }
@@ -56,6 +69,8 @@ Client::~Client() {
 }
 
 void Client::update() {
+  delta_time = glfwGetTime() - last_frame_time;
+  last_frame_time = glfwGetTime();
   glfwSwapBuffers(handle);
   glfwPollEvents();
 
@@ -65,6 +80,9 @@ void Client::update() {
   glViewport(0, 0, width, height);
 
   running = !glfwWindowShouldClose(handle);
+
+  glfwGetCursorPos(handle, &cursor.x, &cursor.y);
+  text = std::to_string(cursor.button) + ", " + std::to_string(cursor.is_pressed);
 }
 
 void Client::ui_begin() {

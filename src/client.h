@@ -10,6 +10,12 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+enum MouseButton {
+  MOUSE_1 = 0,
+  MOUSE_2,
+  MOUSE_3
+};
+
 struct Client {
   Client(const char* p_title);
   ~Client();
@@ -24,6 +30,20 @@ struct Client {
   GLFWwindow* handle;
   bool running;
   int width, height;
+  double delta_time;
+  double last_frame_time;
+
+  // for debugging purposes
+  std::string text;
+
+  ImGuiIO* io;
+
+  struct {
+    double x, y;
+    double xoff, yoff;
+    MouseButton button;
+    bool is_pressed;
+  } cursor;
 };
 
 extern Client g_client;

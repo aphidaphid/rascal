@@ -40,6 +40,7 @@ Mesh::~Mesh() {
 
 void Mesh::render() {
   glBindVertexArray(vao);
+
   shader->use();
   glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.0f));
   glm::mat4 view = glm::scale(model, glm::vec3(scale.x, scale.y, 1.0f));
