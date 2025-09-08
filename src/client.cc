@@ -30,7 +30,7 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
       break;
   }
   // g_state.client.cursor.button = static_cast<MouseButton>(button);
-  g_state.client.mouse.is_pressed = action && !g_state.ui->WantCaptureMouse;
+  g_state.client.mouse.is_pressed = (g_state.client.mouse.m1 || g_state.client.mouse.m2 || g_state.client.mouse.m3);
 }
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
