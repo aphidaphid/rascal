@@ -1,4 +1,7 @@
 #include "client.h"
+#include "state.h"
+
+extern State g_state;
 
 static void error_callback(int err, const char* description) {
   std::cerr << " error: " << description << "(" << err << ")\n";
@@ -15,37 +18,29 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-  g_client.cursor.button = static_cast<MouseButton>(button);
-  g_client.cursor.is_pressed = action && !g_client.io->WantCaptureMouse;
+  g_state.client.cursor.button = static_cast<MouseButton>(button);
+  g_state.client.cursor.is_pressed = action && !g_state.ui->WantCaptureMouse;
 }
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
-  // multiply with `g_client.camera.scale/1.0f` to zoom linearly
-  g_client.camera.scale += yoff * g_client.camera.scale/1.0f * g_client.delta_time * 2;
-  if (g_client.camera.scale < 0.0f)
-    g_client.camera.scale = 0.01f;
-}
-
-static void cursor_enter_callback(GLFWwindow* window, int entered)
-{
-    if (entered) {
-      g_client.rendering = true;
-    }
-    else {
-      g_client.rendering = false;
-    }
+  // multiply with `g_state.client.camera.scale/1.0f` to zoom linearly
+  g_state.camera.scale += yoff * g_state.camera.scale/1.0f * g_state.client.delta_time * 2;
+  if (g_state.camera.scale < 0.0f)
+    g_state.camera.scale = 0.01f;
 }
 
 Client::Client(const char* p_title)
-: running{false}, rendering{true}, cursor{} {
+: running{false}, cursor{} {
   glfwSetErrorCallback(error_callback);
 
   if (!glfwInit()) {
     std::cerr << "glfw failed to initialise\n";
+    std::abort();
   }
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
   handle = glfwCreateWindow(800, 600, p_title, NULL, NULL);
   if (!handle) {
@@ -55,23 +50,13 @@ Client::Client(const char* p_title)
   glfwSetKeyCallback(handle, key_callback);
   glfwSetMouseButtonCallback(handle, mouse_button_callback);
   glfwSetScrollCallback(handle, scroll_callback);
-  glfwSetCursorEnterCallback(handle, cursor_enter_callback);
 
   glfwGetFramebufferSize(handle, &width, &height);
-  camera = {-static_cast<float>(width)/2, -static_cast<float>(height)/2};
   glfwMakeContextCurrent(handle);
   glfwSwapInterval(1); // vsync
   gladLoadGL();
 
   running = true;
-}
-
-void Client::init_ui() {
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  io = &ImGui::GetIO();
-  ImGui_ImplGlfw_InitForOpenGL(handle, true);
-  ImGui_ImplOpenGL3_Init("#version 150");
 }
 
 Client::~Client() {
@@ -96,26 +81,6 @@ void Client::update() {
   running = !glfwWindowShouldClose(handle);
 
   glfwGetCursorPos(handle, &cursor.x, &cursor.y);
-
-  static glm::vec2 curlastpos{};
-  if (cursor.is_pressed) {
-    glm::vec2 position{cursor.x, cursor.y};
-    position -= curlastpos;
-    camera.x -= position.x;
-    camera.y += position.y;
-  }
-  curlastpos = { g_client.cursor.x, g_client.cursor.y };
-}
-
-void Client::ui_begin() {
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
-}
-
-void Client::ui_end() {
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 double Client::get_time() {
