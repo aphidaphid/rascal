@@ -87,6 +87,7 @@ void Client::update() {
   while (!glfwGetWindowAttrib(handle, GLFW_HOVERED)) {
   }
 
+  static double last_frame_time{};
   delta_time = glfwGetTime() - last_frame_time;
   last_frame_time = glfwGetTime();
   glfwSwapBuffers(handle);

@@ -21,8 +21,6 @@ struct Client {
   bool running;
   int width, height;
   double delta_time;
-  double last_frame_time;
-  bool resizing;
 
   struct {
     double x, y;
