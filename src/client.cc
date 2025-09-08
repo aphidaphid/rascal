@@ -18,8 +18,19 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-  g_state.client.cursor.button = static_cast<MouseButton>(button);
-  g_state.client.cursor.is_pressed = action && !g_state.ui->WantCaptureMouse;
+  switch (button) {
+    case 0:
+      g_state.client.mouse.m1 = action && !g_state.ui->WantCaptureMouse;
+      break;
+    case 1:
+      g_state.client.mouse.m2 = action && !g_state.ui->WantCaptureMouse;
+      break;
+    case 2:
+      g_state.client.mouse.m3 = action && !g_state.ui->WantCaptureMouse;
+      break;
+  }
+  // g_state.client.cursor.button = static_cast<MouseButton>(button);
+  g_state.client.mouse.is_pressed = action && !g_state.ui->WantCaptureMouse;
 }
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
@@ -29,8 +40,15 @@ static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
     g_state.camera.scale = 0.01f;
 }
 
+static void window_size_callback(GLFWwindow* window, int width, int height) {
+  g_state.client.width = width;
+  g_state.client.height = height;
+  glfwGetFramebufferSize(g_state.client.handle, &width, &height);
+  glViewport(0, 0, width, height);
+}
+
 Client::Client(const char* p_title)
-: running{false}, cursor{} {
+: running{false}, mouse{} {
   glfwSetErrorCallback(error_callback);
 
   if (!glfwInit()) {
@@ -50,6 +68,7 @@ Client::Client(const char* p_title)
   glfwSetKeyCallback(handle, key_callback);
   glfwSetMouseButtonCallback(handle, mouse_button_callback);
   glfwSetScrollCallback(handle, scroll_callback);
+  glfwSetWindowSizeCallback(handle, window_size_callback);
 
   glfwGetFramebufferSize(handle, &width, &height);
   glfwMakeContextCurrent(handle);
@@ -75,12 +94,9 @@ void Client::update() {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glfwGetFramebufferSize(handle, &width, &height);
-  glViewport(0, 0, width, height);
-
   running = !glfwWindowShouldClose(handle);
 
-  glfwGetCursorPos(handle, &cursor.x, &cursor.y);
+  glfwGetCursorPos(handle, &mouse.x, &mouse.y);
 }
 
 double Client::get_time() {

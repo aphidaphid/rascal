@@ -8,7 +8,6 @@
  * TODO: gltf import
  * TODO: framebuffers
  * TODO: keyboard input
- * TODO: keyboard, mouse, resize callbacks
  */
 
 State g_state{};
@@ -24,17 +23,7 @@ int main() {
 
   while (g_state.client.running) {
     g_state.ui_begin();
-    ImGui::Begin("info");
-    ImGui::Text(std::to_string(g_state.client.delta_time).c_str());
-    if (ImGui::Button("wireframe")) {
-      static bool wireframe{false};
-      wireframe = !wireframe;
-      if (wireframe)
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-      else
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-    }
-    ImGui::End();
+    g_state.ui_debug();
     g_state.ui_end();
 
     rect2.scale.y += std::sin(g_state.client.get_time());

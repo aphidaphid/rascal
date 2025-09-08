@@ -8,12 +8,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-enum MouseButton {
-  MOUSE_1 = 0,
-  MOUSE_2,
-  MOUSE_3
-};
-
 struct Client {
   Client(const char* p_title);
   ~Client();
@@ -28,12 +22,12 @@ struct Client {
   int width, height;
   double delta_time;
   double last_frame_time;
+  bool resizing;
 
   struct {
     double x, y;
-    MouseButton button;
-    bool is_pressed;
-  } cursor;
+    bool m1, m2, m3, is_pressed;
+  } mouse;
 };
 
 #endif /* CLIENT_H */

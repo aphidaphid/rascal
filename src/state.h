@@ -13,6 +13,7 @@ struct State {
   void ui_init();
   void ui_begin();
   void ui_end();
+  void ui_debug();
 
   ImGuiIO* ui;
 
