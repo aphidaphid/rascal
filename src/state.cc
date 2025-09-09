@@ -42,6 +42,7 @@ void State::ui_debug() {
 
     if (ImGui::BeginTabItem("info")) {
       ImGui::Text(("delta_time: " + std::to_string(g_state.client.delta_time)).c_str());
+      ImGui::Text(("time: " + std::to_string(g_state.client.get_time())).c_str());
       static bool wireframe{false};
       if (ImGui::Checkbox("wireframe", &wireframe)) {
         if (wireframe)
