@@ -8,13 +8,10 @@ static void error_callback(int err, const char* description) {
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-  // DPRINT(key);
-  // DPRINT(static_cast<char>(key));
-  // DPRINT(scancode);
-  // DPRINT(action);
-  // DPRINT(mods);
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+  g_state.client.keyboard[key] = static_cast<KeyState>(action);
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -103,6 +100,15 @@ double Client::get_time() {
   return glfwGetTime();
 }
 
-bool Client::get_key(int p_key) {
-  return glfwGetKey(handle, p_key);
+KeyState Client::get_key(int p_key) {
+  KeyState result = keyboard[p_key];
+  /* such that there is one press event */
+  if (keyboard[p_key] == KeyState::Press) {
+    keyboard[p_key] = KeyState::Repeat;
+  }
+  return result;
+}
+
+bool Client::get_key_no_repeat(int p_key) {
+  return get_key(p_key) == KeyState::Press;
 }

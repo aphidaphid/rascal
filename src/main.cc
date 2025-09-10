@@ -35,6 +35,10 @@ int main() {
       g_state.camera = {-static_cast<float>(g_state.client.width)/2, -static_cast<float>(g_state.client.height)/2};
     }
 
+    if (g_state.client.get_key_no_repeat(GLFW_KEY_GRAVE_ACCENT)) {
+      g_state.debug = !g_state.debug;
+    }
+
     g_state.update();
 
     rect.render();

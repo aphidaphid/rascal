@@ -19,6 +19,7 @@ struct State {
 
   Client client{"rascal"};
 
+  bool debug;
   struct {
     float x, y;
     float scale = 1.0f;

@@ -1,6 +1,7 @@
 #include "state.h"
 
-State::State() {
+State::State()
+: debug{false} {
   camera = {-static_cast<float>(client.width)/2, -static_cast<float>(client.height)/2};
 }
 
@@ -37,6 +38,9 @@ void State::ui_end() {
 }
 
 void State::ui_debug() {
+  if (!debug)
+    return;
+
   ImGui::Begin("debug");
   if (ImGui::BeginTabBar("tab_bar", ImGuiTabBarFlags_None)) {
 
@@ -63,6 +67,18 @@ void State::ui_debug() {
           ImGui::Checkbox("m2", &g_state.client.mouse.m2);
           ImGui::Checkbox("m3", &g_state.client.mouse.m3);
           ImGui::Checkbox("is_pressed", &g_state.client.mouse.is_pressed);
+          ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("keyboard")) {
+          for (int i = 0; i < GLFW_KEY_LAST; i++) {
+            KeyState ks = g_state.client.get_key(i);
+            if (ks) {
+              char ch = static_cast<char>(i);
+              ImGui::Text(&ch);
+              ImGui::SameLine();
+              ImGui::Text(ks == KeyState::Press ? "Press" : "Repeat");
+            }
+          }
           ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

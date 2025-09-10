@@ -8,6 +8,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+enum KeyState {
+  Release,
+  Press,
+  Repeat
+};
+
 struct Client {
   Client(const char* p_title);
   ~Client();
@@ -15,7 +21,8 @@ struct Client {
   void update();
 
   double get_time();
-  bool get_key(int p_key);
+  KeyState get_key(int p_key);
+  bool get_key_no_repeat(int p_key);
 
   GLFWwindow* handle;
   bool running;
@@ -26,6 +33,8 @@ struct Client {
     double x, y;
     bool m1, m2, m3, is_pressed;
   } mouse;
+
+  KeyState keyboard[GLFW_KEY_LAST];
 };
 
 #endif /* CLIENT_H */
