@@ -25,16 +25,17 @@ struct Client {
   bool get_key_no_repeat(int p_key);
 
   GLFWwindow* handle;
-  bool running;
   int width, height;
+
+  bool running;
   double delta_time;
+
+  KeyState keyboard[GLFW_KEY_LAST];
 
   struct {
     double x, y;
     bool m1, m2, m3, is_pressed;
   } mouse;
-
-  KeyState keyboard[GLFW_KEY_LAST];
 };
 
 #endif /* CLIENT_H */

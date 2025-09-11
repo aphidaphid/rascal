@@ -15,11 +15,10 @@ struct State {
   void ui_end();
   void ui_debug();
 
-  ImGuiIO* ui;
-
   Client client{"rascal"};
-
+  ImGuiIO* ui;
   bool debug;
+
   struct {
     float x, y;
     float scale = 1.0f;
