@@ -4,7 +4,7 @@
 #include "gfx.h"
 
 struct Texture {
-  Texture(int p_width, int p_height, unsigned char* p_img_handle = nullptr);
+  Texture(int p_width, int p_height);
   Texture(const char* p_file);
   ~Texture();
   void use(int p_texunit = 0);

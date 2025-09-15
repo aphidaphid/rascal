@@ -9,6 +9,7 @@ void State::update() {
   client.update();
 
   /* calc camera movement */
+#ifndef STATIC_CAMERA
   static glm::vec2 curlastpos{};
   if (client.mouse.is_pressed) {
     glm::vec2 position{client.mouse.x, client.mouse.y};
@@ -17,6 +18,7 @@ void State::update() {
     camera.y += position.y;
   }
   curlastpos = { client.mouse.x, client.mouse.y };
+#endif
 }
 
 void State::ui_init() {

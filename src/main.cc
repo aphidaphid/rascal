@@ -3,11 +3,11 @@
 #include "shader.h"
 #include "texture.h"
 #include "mesh.h"
+#include "framebuffer.h"
 
 /*
  * TODO: gltf import
  * TODO: framebuffers
- * TODO: keyboard input
  */
 
 State g_state{};
@@ -15,16 +15,25 @@ State g_state{};
 int main() {
   g_state.ui_init();
 
-  Texture tiles{"res/textures/tiles_512px.jpg", 0};
-  Texture concrete{"res/textures/concrete_512px.jpg", 1};
+  /* create framebuffers before regular textures as framebuffer colour buffers etc. will be bound to context */
+  Framebuffer fb{};
+  Framebuffer::use_default();
+
+  Texture tiles{"res/textures/tiles_512px.jpg"};
+  Texture concrete{"res/textures/concrete_512px.jpg"};
   Shader default_shader{"res/shaders/default.vert", "res/shaders/default.frag"};
   Mesh rect{glm::vec2(0), glm::vec2(300), 0, &default_shader};
   Mesh rect2{glm::vec2(0), glm::vec2(300), 0, &default_shader};
+  Mesh screen_rect{glm::vec2(0), glm::vec2(800, 600), 0, &default_shader};
 
+  glClearColor(0.165, 0.274, 0.165, 1.0);
   while (g_state.client.running) {
     g_state.ui_begin();
     g_state.ui_debug();
     g_state.ui_end();
+
+    screen_rect.scale.y += std::sin(g_state.client.get_time());
+    screen_rect.scale.x += std::sin(g_state.client.get_time());
 
     rect2.scale.y += std::sin(g_state.client.get_time());
     rect2.scale.x += std::cos(g_state.client.get_time());
@@ -41,7 +50,17 @@ int main() {
 
     g_state.update();
 
+    fb.use();
+
+    tiles.use();
     rect.render();
+
+    concrete.use();
     rect2.render();
+
+    Framebuffer::use_default();
+
+    fb.colour_buffer.use();
+    screen_rect.render();
   }
 }

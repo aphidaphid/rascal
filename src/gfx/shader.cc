@@ -23,8 +23,7 @@ static GLuint create_shader(const char* p_src, GLenum p_type) {
     char buffer[512];
     glGetShaderInfoLog(handle, 512, NULL, buffer);
 
-    std::cerr << "shader creation failed:\n";
-    std::cerr << buffer;
+    std::cerr << "shader creation failed: " << buffer << "\n";
 
     std::abort();
   }

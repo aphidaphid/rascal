@@ -9,10 +9,7 @@ in vec2 tex_coord;
 
 out vec4 fragColor;
 
-void main()
-{
-  vec4 tex0 = texture(u_tex0, tex_coord);
-  vec4 tex1 = texture(u_tex1, tex_coord);
-  fragColor = mix(tex0, tex1, sin(u_time));
-  fragColor = vec4(1.0f);
+void main() {
+  fragColor = texture(u_tex0, tex_coord);
+  // fragColor = vec4(tex_coord, 0.0, 1.0);
 }

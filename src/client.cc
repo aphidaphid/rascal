@@ -30,10 +30,12 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 }
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
+#ifndef STATIC_CAMERA
   // multiply with `g_state.client.camera.scale/1.0f` to zoom linearly
   g_state.camera.scale += yoff * g_state.camera.scale/1.0f * g_state.client.delta_time * 2;
   if (g_state.camera.scale < 0.0f)
     g_state.camera.scale = 0.01f;
+#endif
 }
 
 static void window_size_callback(GLFWwindow* window, int width, int height) {
@@ -80,8 +82,8 @@ Client::~Client() {
 }
 
 void Client::update() {
-  while (!glfwGetWindowAttrib(handle, GLFW_HOVERED)) {
-  }
+  // while (!glfwGetWindowAttrib(handle, GLFW_HOVERED)) {
+  // }
 
   static double last_frame_time{};
   delta_time = glfwGetTime() - last_frame_time;
