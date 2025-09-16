@@ -4,9 +4,9 @@ uniform mat4 u_model;
 uniform mat4 u_view;
 uniform mat4 u_proj;
 
-in vec2 a_position;
 in vec3 a_colour;
 in vec2 a_tex_coord;
+in vec2 a_position;
 
 out vec3 colour;
 out vec2 tex_coord;

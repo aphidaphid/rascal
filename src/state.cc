@@ -1,7 +1,11 @@
 #include "state.h"
 
 State::State()
-: debug{false} {
+: debug{false}, shaders{} {
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/default.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/error.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/jfa.frag"));
+
   camera = {-static_cast<float>(client.width)/2, -static_cast<float>(client.height)/2};
 }
 

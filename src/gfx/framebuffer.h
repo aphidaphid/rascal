@@ -3,6 +3,7 @@
 
 #include "gfx.h"
 #include "texture.h"
+#include "mesh.h"
 
 struct Framebuffer {
   Framebuffer();
@@ -10,9 +11,11 @@ struct Framebuffer {
 
   void use();
   static void use_default();
+  void render();
 
   GLuint handle;
   Texture colour_buffer;
+  Mesh quad;
 };
 
 #endif /* FRAMEBUFFER_H */

@@ -1,10 +1,18 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include <vector>
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include "client.h"
+#include "shader.h"
+
+enum ShaderIndex {
+  Default = 0,
+  Error,
+  JFA
+};
 
 struct State {
   State();
@@ -14,6 +22,8 @@ struct State {
   void ui_begin();
   void ui_end();
   void ui_debug();
+
+  std::vector<Shader*> shaders;
 
   Client client{"rascal"};
   ImGuiIO* ui;
