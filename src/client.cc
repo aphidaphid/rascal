@@ -31,6 +31,8 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 
 static void scroll_callback(GLFWwindow* window, double xoff, double yoff) {
 #ifndef STATIC_CAMERA
+  if (g_state.ui->WantCaptureMouse)
+    return;
   // multiply with `g_state.client.camera.scale/1.0f` to zoom linearly
   g_state.camera.scale += yoff * g_state.camera.scale/1.0f * g_state.client.delta_time * 2;
   if (g_state.camera.scale < 0.0f)

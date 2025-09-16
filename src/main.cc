@@ -5,19 +5,17 @@
 #include "mesh.h"
 #include "framebuffer.h"
 
-/*
- * TODO: gltf import
- * TODO: framebuffers
- */
-
 State g_state{};
 
 int main() {
   g_state.ui_init();
 
   /* create framebuffers BEFORE regular textures as framebuffer colour buffers etc. will be bound to context */
-  Framebuffer emission_fb{}, occlusion_fb{};
+  Framebuffer emission_fb{}, occlusion_fb{}, scene_fb;
+  Framebuffer fb_jfa_a{}, fb_jfa_b{}, fb_jfa_c{};
   Framebuffer::use_default();
+
+  const int jfa_steps = 1024;
 
   Texture tiles{"res/textures/tiles_512px.jpg"};
   Texture concrete{"res/textures/concrete_512px.jpg"};
@@ -58,10 +56,39 @@ int main() {
 
     rect3.render(g_state.shaders[VertexColour]);
 
-    Framebuffer::use_default();
+    scene_fb.use();
 
     emission_fb.colour_buffer.use(0);
     occlusion_fb.colour_buffer.use(1);
     g_state.render_screen_rect(g_state.shaders[Scene]);
+
+    fb_jfa_b.use();
+
+    scene_fb.colour_buffer.use(0);
+    g_state.render_screen_rect();
+
+    Framebuffer *jfa1, *jfa2{};
+    bool swapped = true;
+    for (int j = 1024*2; j >= 1; j /= 2) {
+      if (swapped) {
+        jfa1 = &fb_jfa_a;
+        jfa2 = &fb_jfa_b;
+      } else {
+        jfa1 = &fb_jfa_b;
+        jfa2 = &fb_jfa_a;
+      }
+      swapped = !swapped;
+
+      jfa1->use();
+      jfa2->colour_buffer.use(0);
+      g_state.shaders[JumpFlood]->use();
+      g_state.shaders[JumpFlood]->set_int("u_jump_size", j);
+      g_state.render_screen_rect(g_state.shaders[JumpFlood]);
+    }
+
+    Framebuffer::use_default();
+
+    fb_jfa_a.colour_buffer.use(0);
+    g_state.render_screen_rect(g_state.shaders[Default]);
   }
 }
