@@ -15,7 +15,6 @@ struct Framebuffer {
 
   GLuint handle;
   Texture colour_buffer;
-  Mesh quad;
 };
 
 #endif /* FRAMEBUFFER_H */

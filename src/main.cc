@@ -16,7 +16,7 @@ int main() {
   g_state.ui_init();
 
   /* create framebuffers BEFORE regular textures as framebuffer colour buffers etc. will be bound to context */
-  Framebuffer emission_fb{};
+  Framebuffer emission_fb{}, occlusion_fb{};
   Framebuffer::use_default();
 
   Texture tiles{"res/textures/tiles_512px.jpg"};
@@ -26,6 +26,8 @@ int main() {
   rect.set_colour(1.0, 0.0, 1.0);
   Mesh rect2{glm::vec2(0), glm::vec2(300)};
   rect2.set_colour(1.0, 1.0, 0.0);
+  Mesh rect3{glm::vec2(100, -100), glm::vec2(280)};
+  rect3.set_colour(1.0, 1.0, 1.0);
 
   while (g_state.client.running) {
     g_state.ui_begin();
@@ -34,8 +36,8 @@ int main() {
 
     rect2.scale.y += std::sin(g_state.client.get_time());
     rect2.scale.x += std::cos(g_state.client.get_time());
-    rect2.position.y = std::sin(g_state.client.get_time());
-    rect2.position.x = std::cos(g_state.client.get_time());
+    rect2.position.y = std::sin(g_state.client.get_time()) * 200;
+    rect2.position.x = std::cos(g_state.client.get_time()) * 200;
 
     if (g_state.client.get_key(GLFW_KEY_C)) {
       g_state.camera = {-static_cast<float>(g_state.client.width)/2, -static_cast<float>(g_state.client.height)/2};
@@ -49,14 +51,17 @@ int main() {
 
     emission_fb.use();
 
-    tiles.use();
     rect.render(g_state.shaders[VertexColour]);
-
-    concrete.use();
     rect2.render(g_state.shaders[VertexColour]);
+
+    occlusion_fb.use();
+
+    rect3.render(g_state.shaders[VertexColour]);
 
     Framebuffer::use_default();
 
-    emission_fb.render(g_state.shaders[JumpFlood]);
+    emission_fb.colour_buffer.use(0);
+    occlusion_fb.colour_buffer.use(1);
+    g_state.render_screen_rect();
   }
 }

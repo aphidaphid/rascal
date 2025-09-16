@@ -9,7 +9,6 @@ struct Mesh {
   ~Mesh();
 
   void set_colour(float r, float g, float b);
-  void set_colour(glm::vec3 col);
   void render(Shader* shader = nullptr);
 
   GLuint vao, vbo, ebo;

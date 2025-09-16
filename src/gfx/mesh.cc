@@ -52,10 +52,6 @@ void Mesh::set_colour(float r, float g, float b) {
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
-void Mesh::set_colour(glm::vec3 col) {
-  set_colour(col.x, col.y, col.z);
-}
-
 // TODO: clean this up
 void Mesh::render(Shader* shader) {
   if (!shader)

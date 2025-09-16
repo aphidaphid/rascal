@@ -7,6 +7,7 @@
 #include <backends/imgui_impl_opengl3.h>
 #include "client.h"
 #include "shader.h"
+#include "mesh.h"
 
 enum ShaderIndex {
   Default = 0,
@@ -18,6 +19,7 @@ enum ShaderIndex {
 struct State {
   State();
   void update();
+  void render_screen_rect(Shader* shader = nullptr);
 
   void ui_init();
   void ui_begin();
@@ -32,6 +34,7 @@ struct State {
   ImGuiIO* ui;
   bool debug;
 
+  Mesh screen_rect;
   struct {
     float x, y;
     float scale = 1.0f;
