@@ -11,6 +11,7 @@
 enum ShaderIndex {
   Default = 0,
   Error,
+  VertexColour,
   JFA
 };
 

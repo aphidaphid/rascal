@@ -3,9 +3,8 @@
 
 extern State g_state;
 
-Mesh::Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation, Shader* p_shader)
+Mesh::Mesh(glm::vec2 p_position, glm::vec2 p_scale, float p_rotation)
 : position{p_position}, scale{p_scale}, rotation{p_rotation} {
-  shader = p_shader;
 
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
@@ -38,7 +37,10 @@ Mesh::~Mesh() {
   glDeleteVertexArrays(1, &vao);
 }
 
-void Mesh::render() {
+void Mesh::render(Shader* shader) {
+  if (!shader)
+    shader = g_state.shaders[Default];
+
   glBindVertexArray(vao);
 
   shader->use();

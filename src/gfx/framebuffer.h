@@ -11,7 +11,7 @@ struct Framebuffer {
 
   void use();
   static void use_default();
-  void render();
+  void render(Shader* shader = nullptr);
 
   GLuint handle;
   Texture colour_buffer;
