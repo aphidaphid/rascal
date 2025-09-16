@@ -14,7 +14,8 @@ enum ShaderIndex {
   Error,
   VertexColour,
   Scene,
-  JumpFlood
+  JumpFlood,
+  DistanceField
 };
 
 struct State {

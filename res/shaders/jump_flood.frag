@@ -16,7 +16,6 @@ void main() {
   for (int x = -1; x <= 1; x++) {
     for (int y = -1; y <= 1; y++) {
       vec2 neighbour_coord = ndc + (vec2(x, y)/resolution) * u_jump_size; // in ndc
-      // vec2 neighbour_coord = gl_FragCoord.xy + (vec2(x, y)/resolution) * u_jump_size; // in ndc
       vec4 neighbour_sample = texture(u_tex0, neighbour_coord);
 
       if (neighbour_coord != clamp(neighbour_coord, 0.0, 1.0)) continue;

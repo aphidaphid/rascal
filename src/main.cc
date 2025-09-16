@@ -12,7 +12,7 @@ int main() {
 
   /* create framebuffers BEFORE regular textures as framebuffer colour buffers etc. will be bound to context */
   Framebuffer emission_fb{}, occlusion_fb{}, scene_fb;
-  Framebuffer fb_jfa_a{}, fb_jfa_b{}, fb_jfa_c{};
+  Framebuffer fb_jfa_a{}, fb_jfa_b{}, fb_distance_field;
   Framebuffer::use_default();
 
   const int jfa_steps = 1024;
@@ -86,9 +86,14 @@ int main() {
       g_state.render_screen_rect(g_state.shaders[JumpFlood]);
     }
 
-    Framebuffer::use_default();
+    fb_distance_field.use();
 
     fb_jfa_a.colour_buffer.use(0);
+    g_state.render_screen_rect(g_state.shaders[DistanceField]);
+
+    Framebuffer::use_default();
+
+    fb_distance_field.colour_buffer.use(0);
     g_state.render_screen_rect(g_state.shaders[Default]);
   }
 }

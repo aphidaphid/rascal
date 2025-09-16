@@ -141,11 +141,12 @@ void State::reload_shaders() {
 
   #define LOAD_SHADER(x, y) shaders.insert(shaders.begin()+x,      new Shader("res/shaders/default.vert", "res/shaders/"#y".frag"))
 
-  LOAD_SHADER(Default,      default);
-  LOAD_SHADER(Error,        error);
-  LOAD_SHADER(VertexColour, vertex_colour);
-  LOAD_SHADER(Scene,        scene);
-  LOAD_SHADER(JumpFlood,    jump_flood);
+  LOAD_SHADER(Default,       default);
+  LOAD_SHADER(Error,         error);
+  LOAD_SHADER(VertexColour,  vertex_colour);
+  LOAD_SHADER(Scene,         scene);
+  LOAD_SHADER(JumpFlood,     jump_flood);
+  LOAD_SHADER(DistanceField, distance_field);
   // shaders.insert(shaders.begin()+Default,      new Shader("res/shaders/default.vert", "res/shaders/default.frag"));
   // shaders.insert(shaders.begin()+Error,        new Shader("res/shaders/default.vert", "res/shaders/error.frag"));
   // shaders.insert(shaders.begin()+VertexColour, new Shader("res/shaders/default.vert", "res/shaders/vertex_colour.frag"));
