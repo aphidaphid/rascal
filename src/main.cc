@@ -14,21 +14,23 @@ State g_state{};
 
 int main() {
   g_state.ui_init();
-  // glClearColor(0.165, 0.274, 0.165, 1.0);
 
-  /* create framebuffers before regular textures as framebuffer colour buffers etc. will be bound to context */
+  /* create framebuffers BEFORE regular textures as framebuffer colour buffers etc. will be bound to context */
   Framebuffer fb{};
   Framebuffer::use_default();
 
   Texture tiles{"res/textures/tiles_512px.jpg"};
   Texture concrete{"res/textures/concrete_512px.jpg"};
-  Mesh rect{glm::vec2(0), glm::vec2(300), 0};
-  Mesh rect2{glm::vec2(0), glm::vec2(300), 0};
+
+  Mesh rect{glm::vec2(0), glm::vec2(300)};
+  rect.set_colour(1.0, 0.0, 1.0);
+  Mesh rect2{glm::vec2(0), glm::vec2(300)};
+  rect2.set_colour(1.0, 1.0, 0.0);
 
   while (g_state.client.running) {
-    g_state.ui_begin();
-    g_state.ui_debug();
-    g_state.ui_end();
+    // g_state.ui_begin();
+    // g_state.ui_debug();
+    // g_state.ui_end();
 
     rect2.scale.y += std::sin(g_state.client.get_time());
     rect2.scale.x += std::cos(g_state.client.get_time());
@@ -48,10 +50,10 @@ int main() {
     fb.use();
 
     tiles.use();
-    rect.render();
+    rect.render(g_state.shaders[VertexColour]);
 
     concrete.use();
-    rect2.render();
+    rect2.render(g_state.shaders[VertexColour]);
 
     Framebuffer::use_default();
 

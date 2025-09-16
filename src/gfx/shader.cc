@@ -60,19 +60,6 @@ Shader::~Shader() {
 }
 
 void Shader::use() {
-  GLint posAttrib = glGetAttribLocation(handle, "a_position");
-  GLint colAttrib = glGetAttribLocation(handle, "a_colour");
-  GLint texCoordAttrib = glGetAttribLocation(handle, "a_tex_coord");
-
-  glVertexAttribPointer(posAttrib,      2, GL_FLOAT, GL_FALSE, 7*sizeof(float), 0);
-  glVertexAttribPointer(colAttrib,      3, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(2*sizeof(float)));
-  glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(5*sizeof(float)));
-
-  glEnableVertexAttribArray(posAttrib);
-  glEnableVertexAttribArray(colAttrib);
-  glEnableVertexAttribArray(texCoordAttrib);
-
-  // texture units
   set_int("u_tex0", 0);
   set_int("u_tex1", 1);
   set_float("u_time", glfwGetTime());
