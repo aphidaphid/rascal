@@ -58,6 +58,10 @@ void State::ui_debug() {
       if (ImGui::Checkbox("wireframe", &wireframe))
         glPolygonMode(GL_FRONT_AND_BACK, (wireframe) ? GL_LINE : GL_FILL);
 
+      if (ImGui::Button("reload shaders")) {
+        reload_shaders();
+      }
+
       DTEXT(client.delta_time);
       DTEXT(client.get_time());
       DTEXT(camera.x);
@@ -94,4 +98,17 @@ void State::ui_debug() {
 
   }
   ImGui::End();
+}
+
+void State::reload_shaders() {
+  for (int i = shaders.size()-1; i >= 0; i--) {
+    delete shaders[i];
+  }
+  shaders.clear();
+
+  // TODO: clean this up
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/default.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/error.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/vertex_colour.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/jfa.frag"));
 }

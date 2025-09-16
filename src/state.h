@@ -12,7 +12,7 @@ enum ShaderIndex {
   Default = 0,
   Error,
   VertexColour,
-  JFA
+  JumpFlood
 };
 
 struct State {
@@ -23,6 +23,8 @@ struct State {
   void ui_begin();
   void ui_end();
   void ui_debug();
+
+  void reload_shaders();
 
   std::vector<Shader*> shaders;
 

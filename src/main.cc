@@ -16,7 +16,7 @@ int main() {
   g_state.ui_init();
 
   /* create framebuffers BEFORE regular textures as framebuffer colour buffers etc. will be bound to context */
-  Framebuffer fb{};
+  Framebuffer emission_fb{};
   Framebuffer::use_default();
 
   Texture tiles{"res/textures/tiles_512px.jpg"};
@@ -28,9 +28,9 @@ int main() {
   rect2.set_colour(1.0, 1.0, 0.0);
 
   while (g_state.client.running) {
-    // g_state.ui_begin();
-    // g_state.ui_debug();
-    // g_state.ui_end();
+    g_state.ui_begin();
+    g_state.ui_debug();
+    g_state.ui_end();
 
     rect2.scale.y += std::sin(g_state.client.get_time());
     rect2.scale.x += std::cos(g_state.client.get_time());
@@ -47,7 +47,7 @@ int main() {
 
     g_state.update();
 
-    fb.use();
+    emission_fb.use();
 
     tiles.use();
     rect.render(g_state.shaders[VertexColour]);
@@ -57,7 +57,6 @@ int main() {
 
     Framebuffer::use_default();
 
-    // fb.render(g_state.shaders[JFA]);
-    fb.render();
+    emission_fb.render(g_state.shaders[JumpFlood]);
   }
 }
