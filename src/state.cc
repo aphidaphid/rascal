@@ -5,7 +5,7 @@ State::State()
   shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/default.frag"));
   shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/error.frag"));
   shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/vertex_colour.frag"));
-  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/jumpflood.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/scene.frag"));
 
   camera = {-static_cast<float>(client.width)/2, -static_cast<float>(client.height)/2};
 }
@@ -147,5 +147,5 @@ void State::reload_shaders() {
   shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/default.frag"));
   shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/error.frag"));
   shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/vertex_colour.frag"));
-  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/jumpflood.frag"));
+  shaders.push_back(new Shader("res/shaders/default.vert", "res/shaders/scene.frag"));
 }

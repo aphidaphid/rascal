@@ -62,6 +62,6 @@ int main() {
 
     emission_fb.colour_buffer.use(0);
     occlusion_fb.colour_buffer.use(1);
-    g_state.render_screen_rect();
+    g_state.render_screen_rect(g_state.shaders[Scene]);
   }
 }

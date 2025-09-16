@@ -2,13 +2,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Texture::Texture(int p_width, int p_height) {
-
+Texture::Texture(int p_width, int p_height, bool alpha) {
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
 
+  GLenum format = alpha ? GL_RGBA : GL_RGB;
   glTexImage2D(
-      GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
+      GL_TEXTURE_2D, 0, format, p_width, p_height, 0, format, GL_UNSIGNED_BYTE, NULL
   );
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

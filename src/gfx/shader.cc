@@ -60,11 +60,10 @@ Shader::~Shader() {
 }
 
 void Shader::use() {
+  glUseProgram(handle);
   set_int("u_tex0", 0);
   set_int("u_tex1", 1);
   set_float("u_time", glfwGetTime());
-
-  glUseProgram(handle);
 }
 
 void Shader::set_float(const char* p_uniform, float p_set) {

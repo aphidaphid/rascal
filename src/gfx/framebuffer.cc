@@ -5,8 +5,7 @@ extern State g_state;
 
 Framebuffer::Framebuffer()
 // {
-: colour_buffer{800, 600} {
-// : colour_buffer{"res/textures/concrete_512px.jpg"} {
+: colour_buffer{g_state.client.width, g_state.client.height, true} {
   glGenFramebuffers(1, &handle);
 
   GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
