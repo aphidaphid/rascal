@@ -7,9 +7,7 @@ Texture::Texture(int p_width, int p_height, bool alpha) {
   glBindTexture(GL_TEXTURE_2D, handle);
 
   GLenum format = alpha ? GL_RGBA : GL_RGB;
-  glTexImage2D(
-      GL_TEXTURE_2D, 0, format, p_width, p_height, 0, format, GL_UNSIGNED_BYTE, NULL
-  );
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, p_width, p_height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

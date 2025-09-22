@@ -4,7 +4,6 @@
 extern State g_state;
 
 Framebuffer::Framebuffer()
-// {
 : colour_buffer{g_state.client.width, g_state.client.height, true} {
   glGenFramebuffers(1, &handle);
 

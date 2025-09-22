@@ -1,7 +1,7 @@
 #include "state.h"
 
 State::State()
-: debug{false}, shaders{}, screen_rect{} {
+: debug{false}, shaders{} {
   reload_shaders();
   camera = {-static_cast<float>(client.width)/2, -static_cast<float>(client.height)/2};
 }
@@ -23,6 +23,8 @@ void State::update() {
 }
 
 void State::render_screen_rect(Shader* shader) {
+  static Mesh screen_rect{};
+
   if (!shader)
     shader = g_state.shaders[Default];
 
@@ -145,10 +147,8 @@ void State::reload_shaders() {
   LOAD_SHADER(Error,         error);
   LOAD_SHADER(VertexColour,  vertex_colour);
   LOAD_SHADER(Scene,         scene);
+  LOAD_SHADER(JumpFloodPrep, jump_flood_prep);
   LOAD_SHADER(JumpFlood,     jump_flood);
   LOAD_SHADER(DistanceField, distance_field);
-  // shaders.insert(shaders.begin()+Default,      new Shader("res/shaders/default.vert", "res/shaders/default.frag"));
-  // shaders.insert(shaders.begin()+Error,        new Shader("res/shaders/default.vert", "res/shaders/error.frag"));
-  // shaders.insert(shaders.begin()+VertexColour, new Shader("res/shaders/default.vert", "res/shaders/vertex_colour.frag"));
-  // shaders.insert(shaders.begin()+Scene,        new Shader("res/shaders/default.vert", "res/shaders/scene.frag"));
+  LOAD_SHADER(Lighting,      lighting);
 }

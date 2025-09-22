@@ -11,11 +11,8 @@ int main() {
   g_state.ui_init();
 
   /* create framebuffers BEFORE regular textures as framebuffer colour buffers etc. will be bound to context */
-  Framebuffer emission_fb{}, occlusion_fb{}, scene_fb;
-  Framebuffer fb_jfa_a{}, fb_jfa_b{}, fb_distance_field;
+  Framebuffer fb_emission{}, fb_occlusion{}, fb_scene{}, fb_jfa_a{}, fb_jfa_b{}, fb_jfa_prep{}, fb_distance_field;
   Framebuffer::use_default();
-
-  const int jfa_steps = 1024;
 
   Texture tiles{"res/textures/tiles_512px.jpg"};
   Texture concrete{"res/textures/concrete_512px.jpg"};
@@ -47,29 +44,34 @@ int main() {
 
     g_state.update();
 
-    emission_fb.use();
+    fb_emission.use();
 
     rect.render(g_state.shaders[VertexColour]);
     rect2.render(g_state.shaders[VertexColour]);
 
-    occlusion_fb.use();
+    fb_occlusion.use();
 
     rect3.render(g_state.shaders[VertexColour]);
 
-    scene_fb.use();
+    fb_scene.use();
 
-    emission_fb.colour_buffer.use(0);
-    occlusion_fb.colour_buffer.use(1);
+    fb_emission.colour_buffer.use(0);
+    fb_occlusion.colour_buffer.use(1);
     g_state.render_screen_rect(g_state.shaders[Scene]);
+
+    fb_jfa_prep.use();
+
+    fb_scene.colour_buffer.use(0);
+    g_state.render_screen_rect(g_state.shaders[JumpFloodPrep]);
 
     fb_jfa_b.use();
 
-    scene_fb.colour_buffer.use(0);
+    fb_jfa_prep.colour_buffer.use(0);
     g_state.render_screen_rect();
 
     Framebuffer *jfa1, *jfa2{};
     bool swapped = true;
-    for (int j = 1024*2; j >= 1; j /= 2) {
+    for (int j = 2048*2; j >= 1; j /= 2) {
       if (swapped) {
         jfa1 = &fb_jfa_a;
         jfa2 = &fb_jfa_b;
@@ -94,6 +96,11 @@ int main() {
     Framebuffer::use_default();
 
     fb_distance_field.colour_buffer.use(0);
-    g_state.render_screen_rect(g_state.shaders[Default]);
+    fb_scene.colour_buffer.use(1);
+    g_state.shaders[Lighting]->use();
+    g_state.shaders[Lighting]->set_vec2("u_resolution", g_state.client.width, g_state.client.height);
+    g_state.shaders[Lighting]->set_int("u_max_steps", 12);
+    g_state.shaders[Lighting]->set_int("u_rays_per_px", 128);
+    g_state.render_screen_rect(g_state.shaders[Lighting]);
   }
 }

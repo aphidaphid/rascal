@@ -14,8 +14,10 @@ enum ShaderIndex {
   Error,
   VertexColour,
   Scene,
+  JumpFloodPrep,
   JumpFlood,
-  DistanceField
+  DistanceField,
+  Lighting
 };
 
 struct State {
@@ -36,10 +38,9 @@ struct State {
   ImGuiIO* ui;
   bool debug;
 
-  Mesh screen_rect;
   struct {
-    float x, y;
-    float scale = 1.0f;
+    float x, y, scale = 1.0f;
+    bool locked;
   } camera;
 };
 
