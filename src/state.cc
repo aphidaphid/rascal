@@ -85,7 +85,7 @@ void State::ui_end() {
 void State::ui_debug() {
   if (!debug) return;
 
-  ImGui::Begin("debug");
+  ImGui::Begin("engine");
   if (ImGui::BeginTabBar("tab_bar", ImGuiTabBarFlags_None)) {
 
     if (ImGui::BeginTabItem("state")) {

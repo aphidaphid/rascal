@@ -9,7 +9,6 @@ out vec4 fragColor;
 
 void main() {
   fragColor = texture(u_tex0, tex_coord);
-
   vec2 resolution = textureSize(u_tex0, 0);
   vec2 ndc = gl_FragCoord.xy/resolution;
   float closest = 1.0; // in px
@@ -22,7 +21,7 @@ void main() {
       if (neighbour_sample.a == 0) continue;
 
       float d = length((neighbour_sample.rg - ndc) * vec2(resolution.x/resolution.y, 1.0));
-      if (d < closest) {
+      if (d < closest || closest == 1.0) {
         closest = d;
         fragColor = vec4(neighbour_sample.rg, d, 1.0);
       }

@@ -14,8 +14,7 @@ int main() {
   Framebuffer fb_emission{}, fb_occlusion{}, fb_scene{}, fb_jfa_a{}, fb_jfa_b{}, fb_jfa_prep{}, fb_distance_field;
   Framebuffer::use_default();
 
-  Texture tiles{"res/textures/tiles_512px.jpg"};
-  Texture concrete{"res/textures/concrete_512px.jpg"};
+  Texture tiles{"res/textures/tiles_512px.jpg"}, concrete{"res/textures/concrete_512px.jpg"};
 
   Mesh rect{glm::vec2(0), glm::vec2(300)};
   rect.set_colour(1.0, 0.0, 1.0);
@@ -24,15 +23,22 @@ int main() {
   Mesh rect3{glm::vec2(100, -100), glm::vec2(280)};
   rect3.set_colour(1.0, 1.0, 1.0);
 
+  int jump_size{1024};
   while (g_state.client.running) {
     g_state.ui_begin();
     g_state.ui_debug();
+    if (g_state.debug) {
+      ImGui::Begin("game");
+      ImGui::SliderInt("jump size", &jump_size, 0, 4096);
+      ImGui::End();
+    }
     g_state.ui_end();
 
     rect2.scale.y += std::sin(g_state.client.get_time());
     rect2.scale.x += std::cos(g_state.client.get_time());
     rect2.position.y = std::sin(g_state.client.get_time()) * 200;
     rect2.position.x = std::cos(g_state.client.get_time()) * 200;
+    rect2.set_colour(std::sin(g_state.client.get_time()) + 1 / 2, 1.0, 0.0);
 
     if (g_state.client.get_key(GLFW_KEY_C)) {
       g_state.camera = {-static_cast<float>(g_state.client.width)/2, -static_cast<float>(g_state.client.height)/2};
@@ -71,7 +77,7 @@ int main() {
 
     Framebuffer *jfa1, *jfa2{};
     bool swapped = true;
-    for (int j = 2048*2; j >= 1; j /= 2) {
+    for (int j = jump_size*2; j >= 1; j /= 2) {
       if (swapped) {
         jfa1 = &fb_jfa_a;
         jfa2 = &fb_jfa_b;
@@ -99,8 +105,6 @@ int main() {
     fb_scene.colour_buffer.use(1);
     g_state.shaders[Lighting]->use();
     g_state.shaders[Lighting]->set_vec2("u_resolution", g_state.client.width, g_state.client.height);
-    g_state.shaders[Lighting]->set_int("u_max_steps", 12);
-    g_state.shaders[Lighting]->set_int("u_rays_per_px", 128);
     g_state.render_screen_rect(g_state.shaders[Lighting]);
   }
 }
